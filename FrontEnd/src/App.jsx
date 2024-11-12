@@ -61,12 +61,13 @@ function App() {
   };
 
   return (
-    <Box sx={{ padding: 3 }}>
+    <Box sx={{ padding: 2 }}>
       {/* Seção do Título */}
       <Box
         sx={{
           width: '100%',
           height: '100px',
+          padding: 2,
           backgroundColor: 'red',
           display: 'flex',
           justifyContent: 'center',
@@ -76,7 +77,7 @@ function App() {
           mb: 4,
         }}
       >
-        <Typography variant="h3">ADICIONE SUA PRÓXIMA TAREFA</Typography>
+        <Typography variant="h4">ADICIONE SUA PRÓXIMA TAREFA</Typography>
       </Box>
 
       {/* Entrada de Tarefa */}
