@@ -1,7 +1,11 @@
 import express from 'express';
 import mysql from 'mysql';
+import cors from 'cors'
 
 const app = express();
+
+app.use(express.json())
+app.use(cors)
 
 // Configuração da conexão com o MySQL
 const db = mysql.createConnection({
