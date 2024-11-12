@@ -81,7 +81,31 @@ app.delete('/DELETE/:id', (req, res) => {
   });
 });
 
- 
+ // Rota para atualizar uma tarefa pelo ID
+app.put('/UPDATE/:id', (req, res) => {
+  console.log(req.params); 
+  const taskId = req.params.id;
+   
+  const { nome, descricao, status } = req.body;
+
+  const updateQuery = 'UPDATE tarefas SET nome = ?, descricao = ?, status = ? WHERE id = ?';
+
+  db.query(updateQuery, [nome, descricao, status, taskId], (error, results) => {
+
+    if (error) {
+      console.error('Erro ao atualizar a tarefa:', error);
+      res.status(500).send('Erro ao atualizar a tarefa');
+      return;
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).send('Tarefa não encontrada');
+    }
+
+    res.json({ message: 'Tarefa atualizada com sucesso' });
+  });
+});
+
 
 // Iniciando o servidor na porta 5500
 app.listen(5500, () => {

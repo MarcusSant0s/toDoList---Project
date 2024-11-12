@@ -4,6 +4,7 @@ import axios from 'axios';
 import './App.css';
 
 function App() {
+  const [id, setId] = useState(null);  // Estado para o ID da tarefa selecionada
   const [nome, setNome] = useState(''); // Estado para o nome da tarefa
   const [descricao, setDescricao] = useState(''); // Estado para a descrição
   const [status, setStatus] = useState('Pendente'); // Estado para o status
@@ -25,11 +26,11 @@ function App() {
     }
   };
 
-   // Function to delete a task
-   const handleDelete = async (taskId) => {
+  // Função para excluir uma tarefa
+  const handleDelete = async (taskId) => {
     try {
       await axios.delete(`http://localhost:5500/DELETE/${taskId}`);
-      // After successful deletion, fetch the updated tasks list
+      // Após a exclusão, buscar a lista de tarefas novamente
       fetchTasks();
       alert('Tarefa excluída com sucesso!');
     } catch (error) {
@@ -38,6 +39,47 @@ function App() {
     }
   };
 
+  // Função para atualizar a tarefa
+  const handleUpdate = async () => {
+    if (!nome || !descricao || !status) {
+      alert('Por favor, preencha todos os campos');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      // Atualiza a tarefa usando o ID da tarefa selecionada
+      const response = await axios.put(`http://localhost:5500/UPDATE/${id}`, {
+        nome,
+        descricao,
+        status,
+      });
+
+      console.log('Tarefa atualizada com sucesso', response);
+      alert('Tarefa atualizada com sucesso!');
+      setNome('');
+      setDescricao('');
+      setStatus('Pendente');
+      setId(null); // Limpa o ID da tarefa selecionada após a atualização
+
+      // Atualizar a lista de tarefas após a alteração
+      fetchTasks();
+    } catch (error) {
+      console.error('Erro ao atualizar a tarefa:', error);
+      alert('Erro ao atualizar a tarefa');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Função para preencher os campos de edição
+  const handleEdit = (task) => {
+    setId(task.id);  // Armazena o ID da tarefa que será atualizada
+    setNome(task.nome);
+    setDescricao(task.descricao);
+    setStatus(task.status);
+  };
 
   // Chama a função fetchTasks quando o componente é montado
   useEffect(() => {
@@ -97,11 +139,11 @@ function App() {
       {/* Entrada de Tarefa */}
       <Box display="flex" 
         alignItems="center"
-         gap={2}
-         sx={{
+        gap={2}
+        sx={{
           flexDirection: { xs: 'column', sm: 'row' }, // Switch to column layout on small screens
         }}
-         >
+      >
         <TextField
           label="Nome da Tarefa"
           variant="standard"
@@ -151,7 +193,7 @@ function App() {
           onClick={handleSubmit}
           disabled={loading}
         >
-          {loading ? 'Salvando...' : 'Salvar'}
+          {loading ? 'Salvando...' : 'Salvar alterações'}
         </Button>
       </Box>
 
@@ -172,9 +214,19 @@ function App() {
                   <Button
                     variant="contained"
                     color="error"
+                    sx={{ marginLeft: 2 }}
                     onClick={() => handleDelete(task.id)}
                   >
                     Excluir
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ marginLeft: 2 }}
+                    onClick={() => handleEdit(task)}
+                  >
+                    Editar
                   </Button>
                 </ListItem>
               ))
@@ -184,6 +236,10 @@ function App() {
           </List>
         )}
       </Box>
+
+       
+
+   
     </Box>
   );
 }
