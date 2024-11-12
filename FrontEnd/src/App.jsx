@@ -77,11 +77,17 @@ function App() {
           mb: 4,
         }}
       >
-        <Typography variant="h4">ADICIONE SUA PRÓXIMA TAREFA</Typography>
+        <Typography variant="h4">Próxima tarefa</Typography>
       </Box>
 
       {/* Entrada de Tarefa */}
-      <Box display="flex" alignItems="center" gap={2}>
+      <Box display="flex" 
+        alignItems="center"
+         gap={2}
+         sx={{
+          flexDirection: { xs: 'column', sm: 'row' }, // Switch to column layout on small screens
+        }}
+         >
         <TextField
           label="Nome da Tarefa"
           variant="standard"
@@ -100,7 +106,15 @@ function App() {
         />
       </Box>
 
-      <Box display="flex" alignItems="center" gap={2} mt={2}>
+      <Box
+        display="flex" 
+        alignItems="center"
+        gap={2} 
+        mt={2}
+        sx={{
+          flexDirection: { xs: 'column', sm: 'row' }, // Switch to column layout on small screens
+      }}
+      >
         <FormControl fullWidth sx={{ flex: 1 }}>
           <InputLabel id="status-label">Status</InputLabel>
           <Select
