@@ -25,6 +25,20 @@ function App() {
     }
   };
 
+   // Function to delete a task
+   const handleDelete = async (taskId) => {
+    try {
+      await axios.delete(`http://localhost:5500/DELETE/${taskId}`);
+      // After successful deletion, fetch the updated tasks list
+      fetchTasks();
+      alert('Tarefa excluída com sucesso!');
+    } catch (error) {
+      console.error('Erro ao excluir a tarefa:', error);
+      alert('Erro ao excluir a tarefa');
+    }
+  };
+
+
   // Chama a função fetchTasks quando o componente é montado
   useEffect(() => {
     fetchTasks();
@@ -125,7 +139,7 @@ function App() {
           >
             <MenuItem value="Pendente">Pendente</MenuItem>
             <MenuItem value="EmAndamento">Em Andamento</MenuItem>
-            <MenuItem value="Feito">Feito</MenuItem>
+            <MenuItem value="Concluída">Concluída</MenuItem>
           </Select>
         </FormControl>
         
@@ -155,6 +169,13 @@ function App() {
                     primary={task.nome}
                     secondary={`${task.descricao} - Status: ${task.status}`}
                   />
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleDelete(task.id)}
+                  >
+                    Excluir
+                  </Button>
                 </ListItem>
               ))
             ) : (
