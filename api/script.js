@@ -59,6 +59,30 @@ app.post('/INSERT', (req, res) => {
   });
 });
 
+// Rota DELETE para excluir uma tarefa pelo ID
+app.delete('/DELETE/:id', (req, res) => {
+  const taskId = req.params.id;
+
+  // Query SQL para excluir a tarefa
+  const deleteQuery = 'DELETE FROM tarefas WHERE id = ?';
+
+  db.query(deleteQuery, [taskId], (error, results) => {
+    if (error) {
+      console.error('Erro ao excluir a tarefa:', error);
+      res.status(500).send('Erro ao excluir a tarefa');
+      return;
+    }
+    
+    if (results.affectedRows === 0) {
+      return res.status(404).send('Tarefa não encontrada');
+    }
+
+    res.json({ message: 'Tarefa excluída com sucesso' });
+  });
+});
+
+ 
+
 // Iniciando o servidor na porta 5500
 app.listen(5500, () => {
   console.log('Server listening on port 5500');
